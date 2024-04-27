@@ -174,6 +174,7 @@ void WelcomeFunction()
 				exit(0);
 				break;
 			}
+			
 			default:
 			{
 
@@ -199,6 +200,7 @@ void AdministratorMenu()
 	printf("\t\t\n\n1.管理读者\n\n");
 	printf("\t\t\n\n2.管理图书\n\n");
 	printf("\t\t\n\n3.返回上一层\n\n");
+	printf("\t\t\n\n4.文件备份\n\n");
 	printf("\t\t\n\n请按键选择，回车确定\n\n");
 
 	printf("*****************************************************");
@@ -236,6 +238,11 @@ void AdministratorFunction()
 			case('3'):
 			{
 				WelcomeFunction();
+				break;
+			}
+			case('4'):
+			{
+				FileCopy();
 				break;
 			}
 			default:
@@ -280,3 +287,4 @@ void ReaderManagerMenu()
 
 
 }
+
