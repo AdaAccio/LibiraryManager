@@ -60,8 +60,6 @@ void ReaderLandMenu();
 void ReaderMainFunction();
 void BookManageFunction();
 void ReaderLandMain();
-void ReaderDelete();
-void ReturnBook();
 void AdministratorBookSearch();
 void ReaderManagerMenu();
 void ReaderFunction();
@@ -75,6 +73,11 @@ void WelcomeFunction();
 void SortMenu();
 void AdministratorLandMenu();
 void AdministratorVisitBook();
+void ReturnBook();
+void ReaderDelete();
+void FileCopy();
+int copyFile(char* fileRead, char* fileWrite);
+
 
 
 
@@ -97,7 +100,7 @@ void visit_borrow();// 浏览借书情况
 int statistic_reader();//统计文读者本个数函数
 int statistic_book3();//统计账号密码文本个数
 void visit_borrow();//显示借书情况函数
-
+int statistic_numBooks();
 
 //李锐哲
 void alter(int, char[]);  //修改函数

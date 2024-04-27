@@ -311,8 +311,8 @@ void ReturnBook()//还书函数
 	float tprice = 0;
 	char tnamee[100] = { '\0' }, tauthor[100] = { '\0' }, tkind[100] = { '\0' },
 		tchuban[100] = { '\0' }, ttnamee[100] = { '\0' }, tshuhao[100] = { '\0' };
-	int ttzh = 0, tzhenghao = 0, n = 0, k = 0, t = 0, flag = 0;
-	char tname[100] = { '\0' }, ttime[100] = { '\0' }, tznamee[100] = { '\0' }, ttznamee[100] = { '\0' };
+	int  n = 0, k = 0, t = 0, flag = 0;
+	char tname[100] = { '\0' }, ttime[100] = { '\0' }, tznamee[100] = { '\0' }, inputBookName[100] = { '\0' };
 	char hitkey = 0;
 	char Filename[1000] = { 0 };
 	itoa(ReaderID, Filename, 10);
@@ -333,22 +333,22 @@ void ReturnBook()//还书函数
 		{
 			{
 				printf("\n请输入书名:\n请输入:");
-				scanf("%s", ttznamee);//输入还书证号和书名
+				scanf("%s", inputBookName);//输入书名
 				k = statistic_numBooks();//获取读者文件夹信息个数
 				for (i = 0; i < k; i++)//读取读者文件夹信息
 				{
 					fscanf(fp, "%s%s\n ", ttime, tznamee);
-					if (strcmp(ttznamee, tznamee) == 0)//如果证号书名存在，则标记为1
+					if (strcmp(inputBookName, tznamee) == 0)//如果证号书名存在，则标记为1
 						flag = 1;
 				}
 				fclose(fp);
 				fp = fopen(Filename, "r");//打开读者文件，删除借书信息
 				if (flag)
 				{
-					for (i = 0; i < k; i++)//将读者文件复制到链表
+					for (i = 0; i < k; i++)//将读文件复制到链表
 					{
 						fscanf(fp, "%s%s\n ", ttime, tznamee);//读取文件信息
-						if (!((ttzh == tzhenghao) && !strcmp(ttznamee, tznamee)))
+						if (!strcmp(inputBookName, tznamee))
 						{
 							n++;
 							if (n == 1)
@@ -362,7 +362,7 @@ void ReturnBook()//还书函数
 								p2 = p1;
 								p1 = (struct reader*)malloc(LEN1);//新建链表
 							}
-							strcpy(p1->time, ttime);//复制日
+							strcpy(p1->time, ttime);//复制日期
 							strcpy(p1->return_name, tznamee);//复制书名
 						}
 					}
@@ -434,18 +434,15 @@ void ReturnBook()//还书函数
 					fclose(fp3);
 				}}}
 		zp1 = lhead1;
-		for (; zp1 != NULL;)
-		{
-			if (!(strcmp(zp1->name, ttznamee)))//寻找书名相同
-				++(zp1->count);//现存量加1
-			zp1 = zp1->next;
-		}
+		
 		fp3 = fopen("library.txt", "w");//清空图书馆文件
 		fclose(fp);
 		fp3 = fopen("library.txt", "a");//追加信息
 		zp1 = lhead1;
 		for (; zp1 != NULL;)//把链表内容覆盖图书馆文件
 		{
+			if (!(strcmp(zp1->name, inputBookName)))//寻找书名相同
+				++(zp1->count);//现存量加1
 			fprintf(fp3, "%s %s %s %s %s %d %.2f\n",
 				zp1->num, zp1->name, zp1->aut, zp1->pub, zp1->cat, zp1->count, zp1->price);
 			zp1 = zp1->next;
@@ -498,23 +495,6 @@ void visit_borrow()//显示借书情况函数
 	borrow_message();//调用借阅系统
 }
 
-int borrow_humnum()
-{
-
-	FILE* fp;
-	int t = 0;
-	float price = 0;
-	int borrownum = 0, k = 0, count = 0, m = 0, n = 0;
-
-	char  borrowname[100] = { '\0' }, borrowtime[100] = { '\0' }, return_name[100] = { '\0' };
-	char i;
-	fp = fopen("reader.txt", "r");//打开文件
-	for (n = 0; !feof(fp); n++)//逐个读文件
-		fscanf(fp, "%d%s%s%s", &borrownum, borrowname, borrowtime, return_name);
-	n--;
-	fclose(fp);//关闭文件
-	return (n);//返回个数
-}
 
 
 

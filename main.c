@@ -115,7 +115,7 @@ void BookManageFunction()
 
 int main()
 {
-	system("color 1F");
+	system("color 1F");//À¶µ×°××Ö
 	WelcomeFunction();
 	return 0;
 }

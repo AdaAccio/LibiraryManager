@@ -448,54 +448,69 @@ void ReaderSearch()
 	system("cls");
 	FILE* fp;
 	fp = fopen("reader.txt", "r");
+	if (fp == NULL)
+	{
+		printf("不存在读者文件,请输入任意键返回");
+		getch();
+		system("cls");
+		ReaderFunction();
+
+	}
 	int flag = 0;
 	printf("请输入你想要查找的账号：\n");
 	int inputID;
-	scanf("%d", &inputID);
-	if (feof(fp) != 0)
+	int index=scanf("%d", &inputID);
+	if (index == 1)
 	{
-		printf("暂无读者信息\n");
-	}
-	while (feof(fp) == 0)
-	{
-		int ID, type;
-		char name[100] = { 0 };
-		fscanf(fp,"%d %s %d", &ID, name, &type);
-		if (inputID == ID)
+		if (feof(fp) != 0)
 		{
-			flag++;
-			printf("该读者的信息如下：\n姓名：%s\n类型：", name);
-			if (type == 0)
+			printf("暂无读者信息\n");
+		}
+		while (feof(fp) == 0)
+		{
+			int ID, type;
+			char name[100] = { 0 };
+			fscanf(fp, "%d %s %d", &ID, name, &type);
+			if (inputID == ID)
 			{
-				printf("本科生\n");
-				break;
-			}
-			else if (type == 1)
-			{
-				printf("研究生\n");
-				break;
-			}
-			else if (type == 2)
-			{
-				printf("博士生\n");
-				break;
-			}
-			else if (type == 3)
-			{
-				printf("教职工\n");
-				break;
-			}
-			else
-			{
-				printf("ERROR");
-				break;
-			}
+				flag++;
+				printf("该读者的信息如下：\n姓名：%s\n类型：", name);
+				if (type == 0)
+				{
+					printf("本科生\n");
+					break;
+				}
+				else if (type == 1)
+				{
+					printf("研究生\n");
+					break;
+				}
+				else if (type == 2)
+				{
+					printf("博士生\n");
+					break;
+				}
+				else if (type == 3)
+				{
+					printf("教职工\n");
+					break;
+				}
+				else
+				{
+					printf("ERROR");
+					break;
+				}
 
+			}
+		}
+		if (flag == 0)
+		{
+			printf("未查询到该读者");
 		}
 	}
-	if (flag == 0)
+	else
 	{
-		printf("未查询到该读者");
+		printf("输入错误！");
 	}
 	printf("按任意键返回上一层");
 	getch();
@@ -585,7 +600,7 @@ void ReaderDelete()
 				flag++;
 				if (prev == NULL) {
 					head = p->next;
-					if (head != NULL) {
+					if (head != NULL)    {
 						head->prev = NULL;
 					}
 					free(p);
@@ -693,7 +708,6 @@ void AdministratorVisitBook()//浏览图书
 	int k = 0, m = 0, count = 0;
 	float price = 0;
 	char  name[100] = { '\0' }, aut[100] = { '\0' }, cat[100] = { '\0' }, pub[100] = { '\0' }, num[100] = { '\0' };
-	char i;
 	if ((fp = fopen("library.txt", "r")) == NULL)//打开文件
 	{
 		system("cls");
@@ -721,4 +735,96 @@ void AdministratorVisitBook()//浏览图书
 	printf("\n按任意键返回\n");
 	getch();
 	AdministratorBookFunction();
+}
+int copyFile(char* FileRead, char* FileWrite) 
+{
+	FILE* fpR = fopen(FileRead,"r");
+	FILE* fpW = fopen(FileWrite,"w");
+	if (fpR == NULL) {
+		perror("fpR:");
+		return -1;
+	}
+	if (fpW == NULL) {
+		perror("fpW:");
+		return -1;
+	}
+	char buffer = fgetc(fpW);
+	int count = 0;
+	while (!feof(fpR))
+	{
+		count++;
+		fputc(buffer, fpW);
+		buffer = fgetc(fpR);
+	}
+	fclose(fpR);
+	fclose(fpW);
+	return 1;
+}
+
+
+void FileCopy()
+{
+	system("cls");
+	fflush(stdin);
+	char fileWrite[100];  // 复制后的文件名
+	// 获取用户输入
+	printf("请选择要复制的文件：\n");
+	printf("1.读者信息文件\n");
+	printf("2.图书信息文件\n");
+	printf("3.管理员信息文件\n");
+	printf("4.读者借阅信息文件\n");
+	char fileRead[200] = {'\0'};
+	char ch;
+	ch = getchar();
+	ch = getchar();
+
+	
+		switch (ch)
+		{
+		case('1'):
+		{
+			char fileRead[200] = "reader.txt";
+			break;
+		}
+			case('2'):
+			{
+				char fileRead[200] = "library.txt";
+				break;
+			}
+			case('3'):
+			{
+				char fileRead[200] = "Administrator.txt";
+				break;
+			}
+			case('4'):
+			{
+				printf("请输入读者ID\n");
+				int id;
+				scanf("%d", &id);
+				itoa(id, fileRead, 10);
+				strcat(fileRead, ".txt");
+				break;
+			}
+			default:
+			{
+
+				printf("输入错误，请按任意键重新输入");
+				getch();
+				AdministratorFunction();
+			}
+			}
+			
+	printf("将文件复制到：");
+	scanf("%s", fileWrite);
+	// 进行复制操作
+	if (copyFile(fileRead, fileWrite))
+	{
+		printf("文件复制成功！\n");
+	}
+	else {
+		printf("文件复制失败！\n");
+	}
+	printf("按任意键返回");
+	getch();
+	AdministratorFunction();
 }
